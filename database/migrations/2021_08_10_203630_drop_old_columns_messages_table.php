@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNewColumnsMessagesTable extends Migration
+class DropOldColumnsMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,10 +15,7 @@ class AddNewColumnsMessagesTable extends Migration
     {
         Schema::table('messages', function (Blueprint $table) {
             //
-            $table->integer('from');
-            $table->integer('to');
-            $table->tinyInteger('is_read');
-
+            $table->dropColumn('user_id');
         });
     }
 
@@ -31,6 +28,7 @@ class AddNewColumnsMessagesTable extends Migration
     {
         Schema::table('messages', function (Blueprint $table) {
             //
+            $table->integer('user_id')->unsigned();
         });
     }
 }

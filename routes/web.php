@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/home', function () {
-    return view('home');
-});
+// Route::get('/home', function () {
+//     return view('home');
+// });
+
+
 
 Route::get('/', 'ChatsController@index');
 Route::get('messages', 'ChatsController@fetchMessages');
@@ -21,4 +23,5 @@ Route::post('messages', 'ChatsController@sendMessage');
 
 Auth::routes();
 
-// Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/message/{id}', 'HomeController@getMessage')->name('getMess');

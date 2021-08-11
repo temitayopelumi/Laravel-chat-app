@@ -189,5 +189,28 @@
             @yield('content')
         </main>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var receiver_id="";
+        var my_id = "{{ Auth::id() }}";
+       $(document).ready(function (){
+           $('.user').click(function (){
+               $('.user').removeClass('active');
+               $(this).addClass('active');
+               receiver_id =$(this).attr('id');
+               $.ajax({
+                   type: "get",
+                   url: "message/"+receiver_id,
+                   data: "",
+                   cache: false,
+                   success:function (data){
+                       $('#messages').html(data);
+                   }
+                });
+           });
+
+           
+       });
+    </script>
 </body>
 </html>
