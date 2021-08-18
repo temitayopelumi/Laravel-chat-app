@@ -189,11 +189,40 @@
             @yield('content')
         </main>
     </div>
+    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         var receiver_id="";
         var my_id = "{{ Auth::id() }}";
        $(document).ready(function (){
+           $.ajaxSetup({
+               headers: {
+                   'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+               }
+           });
+
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('8ed4ff4aad67fb1b7d30', {
+            cluster: 'mt1',
+            forceTLS: true
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+            alert(JSON.stringify(data));
+            if (my_id == data.from){
+                $('#'+data.to).click();
+            }
+            else if(my_id == data.to) {
+                if (receiver_id ==   data.from){
+                    $('#'+data.from).click();
+                } 
+            }
+            });
+
+
+
            $('.user').click(function (){
                $('.user').removeClass('active');
                $(this).addClass('active');
@@ -207,6 +236,30 @@
                        $('#messages').html(data);
                    }
                 });
+           });
+           $(document).on('keyup', '.input-text input', function(e){
+               var message = $(this).val();
+               if (e.keyCode == 13 && message != '' && receiver_id != ''){
+                   $(this).val('');
+
+                   var datastr =  "receiver_id=" + receiver_id + "&message="  + message;
+                   $.ajax({
+                       type: "post",
+                       url: "message",
+                       data:datastr,
+                       cache:false,
+                       success:function (data) {
+
+                       },
+                       error:function(jqXHR, status,  err){
+
+                       },
+                       complete: function () {
+
+                       }
+
+                   })
+               }
            });
 
            
