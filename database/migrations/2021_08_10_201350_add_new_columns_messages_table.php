@@ -31,6 +31,9 @@ class AddNewColumnsMessagesTable extends Migration
     {
         Schema::table('messages', function (Blueprint $table) {
             //
+            $table->dropColumn('from');
+            $table->dropColumn('to');
+            $table->dropColumn('is_read');
         });
     }
 }
